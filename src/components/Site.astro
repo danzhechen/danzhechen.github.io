@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+import Nav from "./Nav.astro";
+import Hero from "./Hero.astro";
+import About from "./About.astro";
+import FeatureRow from "./FeatureRow.astro";
+import Footer from "./Footer.astro";
+
+interface Props {
+  variant: "editorial" | "cinematic";
+  accent?: string;
+  accentHover?: string;
+}
+const { variant, accent, accentHover } = Astro.props;
+
+// Optionally override the theme's accent for this page (used by color previews).
+const styleVars = [
+  accent ? `--accent:${accent}` : "",
+  accentHover ? `--accent-hover:${accentHover}` : "",
+]
+  .filter(Boolean)
+  .join(";");
+
+const all = await getCollection("projects");
+const byOrder = (a: any, b: any) => a.data.order - b.data.order;
+const stories = all.filter((p) => p.data.thread === "stories").sort(byOrder);
+const exploring = all
+  .filter((p) => p.data.thread === "exploring")
+  .sort(byOrder);
+
+const threads = [
+  {
+    id: "stories",
+    kicker: "The compass",
+    title: "Telling stories",
+    blurb:
+      "A few things I've made so that people, places, and stories can be seen and understood.",
+    projects: stories,
+  },
+  {
+    id: "exploring",
+    kicker: "The engine",
+    title: "Exploring",
+    blurb: "Curiosity-driven builds — wherever a new tool or idea leads me.",
+    projects: exploring,
+  },
+];
+---
+
+<div
+  class={`theme-${variant} min-h-screen bg-[var(--bg)] text-[var(--ink)]`}
+  style={styleVars}
+>
+  <Nav variant={variant} />
+  <main>
+    <Hero />
+    <About />
+
+    {
+      threads.map((thread) => (
+        <section id={thread.id} class="mx-auto max-w-6xl px-6 py-16">
+          <div class="max-w-2xl border-t border-[var(--line)] pt-10">
+            <p class="mb-2 font-mono-c text-xs uppercase tracking-[0.25em] text-[var(--accent)]">
+              {thread.kicker}
+            </p>
+            <h2 class="font-display text-2xl font-medium sm:text-3xl">
+              {thread.title}
+            </h2>
+            <p class="mt-3 text-lg text-[var(--muted)]">{thread.blurb}</p>
+          </div>
+
+          <div class="divide-y divide-[var(--line)]">
+            {thread.projects.map((p, i) => (
+              <FeatureRow
+                title={p.data.title}
+                summary={p.data.summary}
+                tags={p.data.tags}
+                role={p.data.role}
+                year={p.data.year}
+                repo={p.data.repo}
+                link={p.data.link}
+                cover={p.data.cover}
+                coverFit={p.data.coverFit}
+                imageCredit={p.data.imageCredit}
+                video={p.data.video}
+                index={i}
+              />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </main>
+  <Footer />
+</div>

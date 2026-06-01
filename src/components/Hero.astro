@@ -1,0 +1,63 @@
+---
+const socials = [
+  { href: "https://www.linkedin.com/in/danzhe-chen/", label: "LinkedIn" },
+  { href: "https://github.com/danzhechen", label: "GitHub" },
+  { href: "mailto:chendanzhe@gmail.com", label: "Email" },
+];
+---
+
+<section id="top" class="mx-auto max-w-6xl px-6 pt-20 pb-16 sm:pt-28">
+  <div
+    class="rise grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_min(42vw,400px)] lg:gap-14 xl:gap-16"
+  >
+    <!-- Text -->
+    <div class="order-2 min-w-0 lg:order-1">
+      <p class="mb-6 font-display text-3xl font-medium tracking-tight sm:text-4xl">
+        Danzhe Chen
+      </p>
+
+      <h1 class="font-display text-3xl font-medium leading-[1.18] sm:text-5xl lg:text-[3.4rem]">
+        I build things that help people — and their stories —
+        <span class="text-[var(--accent)]">be seen</span>.
+      </h1>
+
+      <p class="mt-8 text-lg leading-relaxed text-[var(--muted)]">
+        Data analyst at Samba TV, working where technology meets storytelling.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        {
+          socials.map((s) => (
+            <a
+              href={s.href}
+              target={s.href.startsWith("http") ? "_blank" : undefined}
+              rel="noopener"
+              class="rounded-full border border-[var(--line)] px-5 py-2 text-sm font-medium transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            >
+              {s.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Headshot: square, large, top-aligned with name -->
+    <div class="order-1 w-full max-w-sm lg:order-2 lg:max-w-none lg:justify-self-end">
+      <img
+        src="/avatar.jpg?v=5"
+        alt="Danzhe Chen"
+        width="400"
+        height="400"
+        class="hero-photo aspect-square w-full object-cover shadow-md"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-photo {
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    object-position: center;
+  }
+</style>

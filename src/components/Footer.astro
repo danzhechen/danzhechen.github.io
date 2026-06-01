@@ -1,0 +1,25 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer id="contact" class="border-t border-[var(--line)] bg-[var(--bg-alt)]">
+  <div class="mx-auto max-w-6xl px-6 py-16">
+    <h2 class="font-display text-2xl font-medium sm:text-3xl">
+      Let's talk.
+    </h2>
+    <p class="mt-3 max-w-md text-[var(--muted)]">
+      Currently in San Francisco. Always happy to chat about curious projects,
+      stories worth telling, or rock climbing.
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+      <a class="hover:text-[var(--accent)]" href="mailto:chendanzhe@gmail.com">chendanzhe@gmail.com</a>
+      <a class="hover:text-[var(--accent)]" href="https://www.linkedin.com/in/danzhe-chen/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="hover:text-[var(--accent)]" href="https://github.com/danzhechen" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <p class="mt-12 font-mono-c text-xs text-[var(--muted)]">
+      &copy; {year} Danzhe Chen — Built with Astro, hosted on GitHub Pages.
+    </p>
+  </div>
+</footer>

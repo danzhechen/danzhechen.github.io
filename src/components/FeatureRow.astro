@@ -1,0 +1,139 @@
+---
+interface Props {
+  title: string;
+  summary: string;
+  tags?: string[];
+  role?: string;
+  year?: string;
+  repo?: string;
+  link?: string;
+  cover?: string;
+  coverFit?: "cover" | "contain";
+  imageCredit?: string;
+  video?: string;
+  index?: number;
+}
+
+const {
+  title,
+  summary,
+  tags = [],
+  role,
+  year,
+  repo,
+  link,
+  cover,
+  coverFit = "cover",
+  imageCredit,
+  video,
+  index = 0,
+} = Astro.props;
+
+const href = link ?? repo ?? video;
+const flip = index % 2 === 1;
+
+function youtubeId(url?: string): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1).split("/")[0];
+    if (u.hostname.includes("youtube.com")) {
+      const v = u.searchParams.get("v");
+      if (v) return v;
+      const m = u.pathname.match(/\/embed\/([^/]+)/);
+      if (m) return m[1];
+    }
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+const ytId = youtubeId(video);
+const poster =
+  cover ?? (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null);
+const imgClass =
+  coverFit === "contain"
+    ? "h-full w-full object-contain bg-[var(--bg-alt)] p-10"
+    : "h-full w-full object-cover";
+---
+
+<article class="grid items-center gap-8 py-12 md:grid-cols-2 md:gap-14">
+  <div class={`${flip ? "md:order-2" : ""}`}>
+    <div class="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-[var(--line)]">
+      {
+        poster ? (
+          <>
+            <img src={poster} alt={title} class={imgClass} loading="lazy" />
+            {imageCredit && (
+              <p class="absolute bottom-0 left-0 right-0 bg-black/55 px-3 py-1.5 text-[10px] leading-snug text-white/90">
+                {imageCredit}
+              </p>
+            )}
+            {video && (
+              <a
+                href={video}
+                target="_blank"
+                rel="noopener"
+                class="absolute inset-0 flex items-center justify-center bg-black/25 transition-colors hover:bg-black/35"
+                aria-label={`Watch ${title}`}
+              >
+                <span class="grid h-14 w-14 place-items-center rounded-full bg-white/95 text-[var(--heading)] shadow-md">
+                  <svg class="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+              </a>
+            )}
+          </>
+        ) : (
+          <div class="flex h-full w-full flex-col items-center justify-center gap-2 bg-[var(--bg-alt)] px-8 text-center">
+            <p class="font-display text-lg font-medium text-[var(--heading)]">{title}</p>
+            {role && (
+              <p class="font-mono-c text-xs uppercase tracking-widest text-[var(--accent)]">
+                {role}
+              </p>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <div class={`${flip ? "md:order-1" : ""}`}>
+    <div class="flex items-center gap-3 font-mono-c text-xs uppercase tracking-widest text-[var(--muted)]">
+      {role && <span class="text-[var(--accent)]">{role}</span>}
+      {year && <span>· {year}</span>}
+    </div>
+
+    <h3 class="mt-3 font-display text-xl font-medium sm:text-2xl">{title}</h3>
+
+    <p class="mt-4 max-w-xl text-base leading-relaxed text-[var(--muted)]">{summary}</p>
+
+    {
+      tags.length > 0 && (
+        <div class="mt-5 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="rounded-full border border-[var(--line)] px-2.5 py-0.5 text-xs text-[var(--muted)]">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      href && (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener"
+          class="mt-6 inline-flex items-center gap-1 text-sm font-medium text-[var(--accent)] hover:underline"
+        >
+          {video ? "Watch video" : link ? "View project" : "View code"}
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      )
+    }
+  </div>
+</article>

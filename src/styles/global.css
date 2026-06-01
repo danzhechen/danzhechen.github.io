@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/*
+  Palette + type borrowed from boyuan.space (Raleway + Open Sans, soft greys,
+  calm academic blue), applied to our own layout. Two skins via wrapper class.
+*/
+
+:root {
+  /* Raleway for headings/labels (elegant, airy), Open Sans for body text */
+  --font-display: "Raleway", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  /* labels render in Raleway too — no typewriter/"product" feel */
+  --font-mono: "Raleway", ui-sans-serif, system-ui, sans-serif;
+}
+
+.theme-editorial {
+  --bg: #ffffff;
+  --bg-alt: #f2f2f2;
+  --ink: #484848;
+  --heading: #222222;
+  --muted: #767676;
+  --line: #e6e6e6;
+  --accent: #d98a00;
+  --accent-hover: #a96a00;
+  --accent-ink: #ffffff;
+}
+
+.theme-cinematic {
+  --bg: #0c0e12;
+  --bg-alt: #14171e;
+  --ink: #d7dae2;
+  --heading: #f2f4f8;
+  --muted: #9aa0ad;
+  --line: #232733;
+  --accent: #3f97dd;
+  --accent-hover: #6fb4e8;
+  --accent-ink: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings use the display face and the darker heading color */
+.theme-editorial :is(h1, h2, h3, h4),
+.theme-cinematic :is(h1, h2, h3, h4) {
+  color: var(--heading);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono-c {
+  font-family: var(--font-mono);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
